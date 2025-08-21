@@ -21,6 +21,7 @@ export default function UploadForm() {
     }
   }, []);
 
+  // handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     // add trim to remove whitespace if any
@@ -29,13 +30,17 @@ export default function UploadForm() {
     setError("");
 
     try {
+      // Send image URL to backend for prediction
       const response = await axios.post("http://localhost:3000/prediction", {
         imgURL: inputUrl,
       });
+
       const predictions = response.data.response;
 
+      // extract top/best result
       const bestPredictions = predictions[0];
 
+      // Update result with type of vehicle and result %
       setResult({
         imageUrl: inputUrl,
         label: bestPredictions?.tagName || "Unknown",
@@ -65,7 +70,7 @@ export default function UploadForm() {
           >
             <input
               type="search"
-              placeholder="🔎 paste image URL here"
+              placeholder="Paste image URL here"
               value={inputUrl}
               onChange={(e) => {
                 setInputUrl(e.target.value);
